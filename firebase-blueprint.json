@@ -1,0 +1,184 @@
+{
+  "entities": {
+    "SavedMock": {
+      "title": "SavedMock",
+      "description": "A generated mock exam saved by a user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier for the mock exam." },
+        "userId": { "type": "string", "description": "The UID of the user who generated the mock." },
+        "prompt": { "type": "string", "description": "The prompt or exam name used to generate the mock." },
+        "data": { "$ref": "ExamData", "description": "The full exam data." },
+        "createdAt": { "type": "number", "description": "Timestamp of creation." }
+      },
+      "required": ["id", "userId", "prompt", "data", "createdAt"]
+    },
+    "ExamData": {
+      "title": "ExamData",
+      "description": "The detailed data of an exam.",
+      "type": "object",
+      "properties": {
+        "examName": { "type": "string" },
+        "stageName": { "type": "string" },
+        "syllabusSummary": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "patternDetails": { "type": "string" },
+        "durationMinutes": { "type": "number" },
+        "questions": { "type": "array", "items": { "$ref": "ExamQuestion" } },
+        "structuredPattern": { "$ref": "ExamPattern" },
+        "markingScheme": { "type": "object" }
+      },
+      "required": ["examName", "stageName", "syllabusSummary", "difficulty", "patternDetails", "durationMinutes", "questions", "structuredPattern"]
+    },
+    "ExamQuestion": {
+      "title": "ExamQuestion",
+      "description": "A single question in an exam.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "examName": { "type": "string" },
+        "stageName": { "type": "string" },
+        "section": { "type": "string" },
+        "topic": { "type": "string" },
+        "subTopic": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "liveDifficulty": { "type": "string" },
+        "stats": { "type": "object" },
+        "question": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "correctAnswer": { "type": "string" },
+        "explanation": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["id", "examName", "section", "topic", "difficulty", "question", "options", "correctAnswer", "explanation"]
+    },
+    "ExamPattern": {
+      "title": "ExamPattern",
+      "description": "The pattern of an exam.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "examName": { "type": "string" },
+        "stageName": { "type": "string" },
+        "totalQuestions": { "type": "number" },
+        "totalDuration": { "type": "number" },
+        "sections": { "type": "array", "items": { "type": "object" } },
+        "markingScheme": { "type": "object" }
+      },
+      "required": ["examName", "totalQuestions", "totalDuration", "sections"]
+    },
+    "SavedCourse": {
+      "title": "SavedCourse",
+      "description": "A learning course saved by a user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "course_id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "modules": { "type": "array", "items": { "type": "object" } },
+        "progress": { "type": "number" },
+        "lastAccessed": { "type": "number" }
+      },
+      "required": ["id", "course_id", "userId", "title", "description", "modules", "progress", "lastAccessed"]
+    },
+    "SearchStat": {
+      "title": "SearchStat",
+      "description": "Statistics for exam searches.",
+      "type": "object",
+      "properties": {
+        "examName": { "type": "string" },
+        "count": { "type": "number" },
+        "lastSearched": { "type": "number" }
+      },
+      "required": ["examName", "count", "lastSearched"]
+    },
+    "ExamStructureCache": {
+      "title": "ExamStructureCache",
+      "description": "Cached structure of an exam.",
+      "type": "object",
+      "properties": {
+        "examName": { "type": "string" },
+        "stages": { "type": "array", "items": { "type": "object" } },
+        "lastUpdated": { "type": "number" }
+      },
+      "required": ["examName", "stages", "lastUpdated"]
+    },
+    "UserLog": {
+      "title": "UserLog",
+      "description": "Log of a user's attempt on a question.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "questionId": { "type": "string" },
+        "isCorrect": { "type": "boolean" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["userId", "questionId", "isCorrect", "timestamp"]
+    },
+    "UserExamHistory": {
+      "title": "UserExamHistory",
+      "description": "History of a user's exam attempts.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "examName": { "type": "string" },
+        "score": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "timestamp": { "type": "number" },
+        "sectionPerformance": { "type": "object" }
+      },
+      "required": ["id", "userId", "examName", "score", "totalQuestions", "timestamp"]
+    },
+    "UserCapability": {
+      "title": "UserCapability",
+      "description": "User's capabilities in specific sections.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "capabilities": { "type": "object" }
+      },
+      "required": ["userId", "capabilities"]
+    }
+  },
+  "firestore": {
+    "/mocks/{mockId}": {
+      "schema": { "$ref": "SavedMock" },
+      "description": "Stores generated mock exams for users."
+    },
+    "/courses/{courseId}": {
+      "schema": { "$ref": "SavedCourse" },
+      "description": "Stores learning courses for users."
+    },
+    "/search_stats/{examName}": {
+      "schema": { "$ref": "SearchStat" },
+      "description": "Stores search statistics for exams."
+    },
+    "/exam_cache/{examName}": {
+      "schema": { "$ref": "ExamStructureCache" },
+      "description": "Caches exam structures."
+    },
+    "/patterns/{patternId}": {
+      "schema": { "$ref": "ExamPattern" },
+      "description": "Caches exam patterns."
+    },
+    "/questions/{questionId}": {
+      "schema": { "$ref": "ExamQuestion" },
+      "description": "Stores individual exam questions."
+    },
+    "/user_logs/{logId}": {
+      "schema": { "$ref": "UserLog" },
+      "description": "Stores logs of user attempts on questions."
+    },
+    "/user_exam_history/{historyId}": {
+      "schema": { "$ref": "UserExamHistory" },
+      "description": "Stores user exam history."
+    },
+    "/user_capabilities/{userId}": {
+      "schema": { "$ref": "UserCapability" },
+      "description": "Stores user capabilities."
+    }
+  }
+}

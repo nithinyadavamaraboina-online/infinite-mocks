@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Infinite Mocks</title>
+    <script>
+      // Initialize theme immediately to prevent FOUC (Flash of Unstyled Content) or White Flash
+      try {
+        const saved = localStorage.getItem('infinite_mocks_theme');
+        const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && sysDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    </script>
+    <script>
+      // Lite Mode Detection (Client-Side Fallback)
+      (function() {
+        var isLiteRoute = window.location.pathname === '/lite';
+        var hasLiteCookie = document.cookie.indexOf('lite_mode=true') !== -1;
+        var hasFullCookie = document.cookie.indexOf('lite_mode=false') !== -1;
+
+        // If user explicitly chose full mode, don't redirect
+        if (hasFullCookie) return;
+
+        // Detect missing modern features
+        var isLegacy = !window.fetch || !window.Promise || !window.URLSearchParams;
+
+        if (isLegacy && !isLiteRoute) {
+          window.location.href = '/lite' + window.location.search;
+        }
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              slate: {
+                850: '#1e293b', 
+                950: '#020617',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+      body {
+        font-family: 'Inter', sans-serif;
+        /* background-color: #ffffff; removed to allow tailwind classes to control this */ 
+        /* color: #0f172a; removed */
+      }
+      .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+      /* Custom scrollbar for code blocks */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9; /* Slate 100 */
+      }
+      .dark ::-webkit-scrollbar-track {
+        background: #0f172a; /* Slate 900 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1; /* Slate 300 */
+        border-radius: 4px;
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #334155; /* Slate 700 */
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8; /* Slate 400 */
+      }
+    </style>
+
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "firebase/": "https://esm.sh/firebase@^12.9.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBoOT7hoGwMgeDHWd8JgSH80yRR6YxO-1A",
+    authDomain: "new-infinite-db.firebaseapp.com",
+    projectId: "new-infinite-db",
+    storageBucket: "new-infinite-db.firebasestorage.app",
+    messagingSenderId: "35521497604",
+    appId: "1:35521497604:web:5e6dc4a6151417f4420351",
+    measurementId: "G-1CVQPPJDVH"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+</html>
